@@ -1,26 +1,54 @@
-import React from 'react';
-import {View, StyleSheet, Text, TextInput, Button} from 'react-native';
+import React, {useState} from 'react';
+import {
+  View,
+  StyleSheet,
+  Text,
+  TextInput,
+  Button,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from 'react-native';
 
 import Card from '../components/Card';
+import Input from '../components/Input';
 import Colors from '../constants/colors';
 
 const StartGameScreen = props => {
+  const [enteredValue, setEnteredValue] = useState('');
+
+  const numberInputHandler = inputText => {
+    setEnteredValue(inputText);
+    // setEnteredValue(inputText.replace(/[^0-9]/g, ''));
+  };
+
   return (
-    <View style={styles.screen}>
-      <Text style={styles.title}>Start A New Game!</Text>
-      <Card style={styles.inputContainer}>
-        <Text style={{margin: 5, padding: 5}}>Select a Number</Text>
-        <TextInput placeholder="Type a Number" />
-        <View style={styles.buttonContainer}>
-          <View style={{width: '40%'}}>
-            <Button title="Reset" onPress={() => {}} color={Colors.accent} />
+    <TouchableWithoutFeedback
+      onPress={() => {
+        Keyboard.dismiss();
+      }}>
+      <View style={styles.screen}>
+        <Text style={styles.title}>Start A New Game!</Text>
+        <Card style={styles.inputContainer}>
+          <Text style={{margin: 2, padding: 2}}>Select a Number</Text>
+          <Input
+            keyboardType="number-pad"
+            style={styles.input}
+            maxLength={2}
+            blurOnSubmit
+            onChange={numberInputHandler}
+            value={enteredValue}
+          />
+          <View style={styles.buttonContainer}>
+            <View style={{width: '40%'}}>
+              <Button title="Reset" onPress={() => {}} color={Colors.accent} />
+            </View>
+            <View style={{width: '40%'}}>
+              <Button title="Confirm" onPress={() => {}} />
+            </View>
           </View>
-          <View style={{width: '40%'}}>
-            <Button title="Confirm" onPress={() => {}} />
-          </View>
-        </View>
-      </Card>
-    </View>
+        </Card>
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -45,6 +73,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 15,
     margin: 10,
+  },
+  input: {
+    width: 60,
+    padding: 5,
+    textAlign: 'center',
   },
 });
 
